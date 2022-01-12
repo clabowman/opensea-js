@@ -1139,11 +1139,17 @@ export class OpenSeaPort {
     accountAddress,
     recipientAddress,
     referrerAddress,
+    gasBase,
+    gasMax,
+    gasPrio,
   }: {
     order: Order;
     accountAddress: string;
     recipientAddress?: string;
     referrerAddress?: string;
+    gasBase?: int;
+    gasMax?: int;
+    gasPrio?: int;
   }): Promise<string> {
     const matchingOrder = this._makeMatchingOrder({
       order,
@@ -1159,6 +1165,9 @@ export class OpenSeaPort {
       sell,
       accountAddress,
       metadata,
+      gasBase,
+      gasMax,
+      gasPrio,
     });
 
     await this._confirmTransaction(
@@ -3926,17 +3935,23 @@ export class OpenSeaPort {
     buy,
     sell,
     accountAddress,
+    gasBase,
+    gasMax,
+    gasPrio,
     metadata = NULL_BLOCK_HASH,
   }: {
     buy: Order;
     sell: Order;
     accountAddress: string;
+    gasBase?: int;
+    gasMax?, int;
+    gasPrio?, int;
     metadata?: string;
   }) {
     let value;
     let shouldValidateBuy = true;
     let shouldValidateSell = true;
-
+    console.log(gasBase)
     if (sell.maker.toLowerCase() == accountAddress.toLowerCase()) {
       // USER IS THE SELLER, only validate the buy order
       await this._sellOrderValidationAndApprovals({
